@@ -12,10 +12,10 @@ public class MapBottom {
     BottomRay bottomRay = new BottomRay();
     BottomNum bottomNum = new BottomNum();
 
-    {
-        bottomRay.newRay();
-        bottomNum.newNum();
-    }
+//    {
+//        bottomRay.newRay();
+//        bottomNum.newNum();
+//    }
 
     //重置游戏
     void reGame() {
@@ -88,21 +88,21 @@ public class MapBottom {
                 g.drawImage(Gameface,
                         OFFSET + SQUARE_LEN * (MAP_W / 2),
                         OFFSET,
-                        SQUARE_LEN - 2, SQUARE_LEN - 2,
+                        SQUARE_LEN, SQUARE_LEN,
                         null);
                 break;
             case 1:
                 g.drawImage(Winface,
                         OFFSET + SQUARE_LEN * (MAP_W / 2),
                         OFFSET,
-                        SQUARE_LEN - 2, SQUARE_LEN - 2,
+                        SQUARE_LEN, SQUARE_LEN,
                         null);
                 break;
             case 2:
                 g.drawImage(Loseface,
                         OFFSET + SQUARE_LEN * (MAP_W / 2),
                         OFFSET,
-                        SQUARE_LEN - 2, SQUARE_LEN - 2,
+                        SQUARE_LEN, SQUARE_LEN,
                         null);
                 break;
             default:

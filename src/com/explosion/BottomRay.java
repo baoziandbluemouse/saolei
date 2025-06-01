@@ -8,39 +8,36 @@ import static com.explosion.GameUtil.*;
 
 
 public class BottomRay {
-
-    //采用Set存放地雷的横、竖坐标
-    HashSet<Pair<Integer, Integer>> set = new HashSet<Pair<Integer, Integer>>();
-    //x,y用于代表地雷坐标
-    int x, y;
-
     //生成地雷的具体方法
-    //注意随机生成时，可能会出现坐标重复的问题，要进行判断，防止地雷重合的问题
     void newRay() {
-
-        for (int i = 0; i < RAY_MAX * 2; i += 2) {
+        //注意随机生成时，可能会出现坐标重复的问题，要进行判断，防止地雷重合的问题
+        //采用Set存放地雷的横、竖坐标
+        //Set作为局部变量，才不会在重启游戏时没有清空地雷
+        HashSet<Pair<Integer, Integer>> set = new HashSet<Pair<Integer, Integer>>();
+        //x,y用于代表地雷坐标
+        int x, y;
+        int count = 0;
+        //count达到RAY_MAX才会停止随机生成
+        while (count < RAY_MAX) {
             //随机生成x,y坐标，范围为1-11
             //random生成一个0-1.0的浮点数（1取不到）
             x = (int) (Math.random() * MAP_W + 1);
             y = (int) (Math.random() * MAP_H + 1);
 
+            Pair<Integer, Integer> p = new Pair<>(x, y);
             //将生成坐标赋值到Set中
-            //如果已经有了，那就要重新生成
-            if (set.contains(new Pair<>(x, y))) {
-                i -= 2;
-            } else {
-                set.add(new Pair<Integer, Integer>(x, y));
+            //如果已经有了，那就不赋值了
+            if (!set.contains(p)) {
+                set.add(p);
+                //将地雷添加到二维数组中，后续用于制作雷区
+                //-1代表有雷
+                DATA_BOTTOM[x][y] = -1;
+                count++;
             }
         }
-
-        //将地雷添加到二维数组中，后续用于制作雷区
-        //-1代表有雷
-        for (Pair<Integer, Integer> p : set) {
-            DATA_BOTTOM[p.first][p.second] = -1;
-        }
-
     }
 }
+
 
 //自定义一个pair类
 class Pair<K, V> {

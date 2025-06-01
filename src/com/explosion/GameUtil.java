@@ -4,15 +4,15 @@ package com.explosion;
 
 
 import java.awt.*;
-import java.io.InputStream;
 
 public class GameUtil {
+    //初始的全设置为最高的，防止更改难度导致数组越界
     //地雷个数
-    static int RAY_MAX = 5;
+    static int RAY_MAX = 100;
     //雷区的宽
-    static int MAP_W = 11;
+    static int MAP_W = 36;
     //雷区的高
-    static int MAP_H = 11;
+    static int MAP_H = 36;
     //雷区界面偏移量
     static int OFFSET = 45;
     //雷区中每个格子边长
@@ -32,8 +32,8 @@ public class GameUtil {
     //游戏难度
     static int level;
     //倒计时
-    static long START_TIME ;
-    static long END_TIME ;
+    static long START_TIME;
+    static long END_TIME;
 
     //底层元素 -1 雷 0 空 1-8表示对应数字,用于制作雷区
     static int[][] DATA_BOTTOM = new int[MAP_W + 2][MAP_H + 2];

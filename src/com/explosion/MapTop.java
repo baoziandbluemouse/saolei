@@ -14,6 +14,7 @@ public class MapTop {
     //格子位置,通过公式将鼠标点击得到的坐标转换为格子坐标
     int temp_x;
     int temp_y;
+    int endflag = -1;
 
     //重置游戏
     void reGameTop() {
@@ -27,6 +28,9 @@ public class MapTop {
 
     //判断逻辑
     void logic() {
+        if (endflag == 1) {
+            return;
+        }
         temp_y = 0;
         temp_x = 0;
         if (MOUSE_X > OFFSET && MOUSE_Y > OFFSET * 3) {
@@ -58,8 +62,12 @@ public class MapTop {
                 }
             }
         }
-        islose();
-        isvictory();
+        if (islose()) {
+            endflag = 1;
+        }
+        if (isvictory()) {
+            endflag = 1;
+        }
     }
 
     //失败判定

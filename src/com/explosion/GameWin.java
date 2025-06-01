@@ -13,7 +13,10 @@ import static com.explosion.GameUtil.*;
 public class GameWin extends JFrame {
     MapBottom mapbottom = new MapBottom();
     MapTop maptop = new MapTop();
+    GameSelect gameselect = new GameSelect();
     Image offScreenImage = null;
+    //是否开始游戏
+    boolean begin = false;
     //根据雷区的大小，来确定整个游戏窗口的大小
     int wigth = 2 * OFFSET + SQUARE_LEN * MAP_W;
     int height = 4 * OFFSET + SQUARE_LEN * MAP_H;
@@ -22,7 +25,11 @@ public class GameWin extends JFrame {
     void lunch() {
         START_TIME = System.currentTimeMillis();
         this.setVisible(true);
-        this.setSize(wigth, height);
+        if (state == 3) {
+            this.setSize(500, 500);
+        } else {
+            this.setSize(wigth, height);
+        }
         this.setLocationRelativeTo(null);//窗口居中显示
         this.setTitle("扫雷");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +71,17 @@ public class GameWin extends JFrame {
                                 START_TIME = System.currentTimeMillis();
                             }
                         }
+                        if (e.getButton() == 2) {
+                            state = 3;
+                            begin = true;
+                        }
                         break;
+                    case 3:
+                        if (e.getButton() == 1) {
+                            MOUSE_X = e.getX();
+                            MOUSE_Y = e.getY();
+                            begin = gameselect.hard();
+                        }
                     default:
                         break;
                 }
@@ -87,6 +104,7 @@ public class GameWin extends JFrame {
         //让游戏界面不停更新
         while (true) {
             repaint();
+            began();
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -95,16 +113,40 @@ public class GameWin extends JFrame {
         }
     }
 
+    void began() {
+        if (begin) {
+            //释放状态
+            begin = false;
+            gameselect.hard(level);
+            dispose();//退出当前界面
+            GameWin gamewin = new GameWin();
+            START_TIME = System.currentTimeMillis();
+            mapbottom.reGame();
+            maptop.reGameTop();
+            //重置旗数，避免出现游戏换模式后雷数不对的情况
+            FLAG_NUM = 0;
+            //重置鼠标X,Y，避免出现游戏刚开始就有格子被翻开的情况
+            MOUSE_X = 0;
+            MOUSE_Y = 0;
+            gamewin.lunch();
+        }
+    }
+
     //在游戏窗口中绘制雷区
     @Override
     public void paint(Graphics g) {
-        offScreenImage = this.createImage(wigth, height);
-        Graphics gImage = offScreenImage.getGraphics();
-        gImage.setColor(Color.gray);
-        gImage.fillRect(0, 0, wigth, height);
-        mapbottom.paintSelf(gImage);
-        maptop.paintSelf(gImage);
-        g.drawImage(offScreenImage, 0, 0, null);
+        if (state == 3) {
+            gameselect.paintself(g);
+        } else {
+            offScreenImage = this.createImage(wigth, height);
+            Graphics gImage = offScreenImage.getGraphics();
+            gImage.setColor(Color.gray);
+            gImage.fillRect(0, 0, wigth, height);
+            mapbottom.paintSelf(gImage);
+            maptop.paintSelf(gImage);
+            g.drawImage(offScreenImage, 0, 0, null);
+        }
+
     }
 
     //主函数作为入口
